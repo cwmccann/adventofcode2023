@@ -5,6 +5,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"log"
 )
 
 type Round struct {
@@ -88,16 +89,15 @@ func main() {
 	input, err := os.ReadFile("input.txt")
 	if err != nil {
 		// handle the error here
-		fmt.Println(err)
-		return
+		log.Fatal(err)
 	}
 
 	// Convert []byte to string
-	text := string(input)
-	solution := SolvePart1(text)
+	inputString := string(input)
+	solution := SolvePart1(inputString)
 	fmt.Printf("Solution Part 1: %d\n", solution)
 
-	solution = SolvePart2(text);
+	solution = SolvePart2(inputString)
 	fmt.Printf("Solution Part 2: %d\n", solution)
 }
 
