@@ -4,10 +4,8 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strings"
-	"regexp"
 	"strconv"
-	"bufio"
+	"strings"
 )
 
 func main() {
@@ -25,179 +23,215 @@ func main() {
 	fmt.Printf("Solution Part 2: %d\n", solution)
 }
 
+
 func SolvePart1(input string) int {
-	seeds := GetSeeds(input)
-	seedToSoilMap, _ := GetMap(input, "seed-to-soil")
-	soilToFertilizerMap, _ := GetMap(input, "soil-to-fertilizer")
-	fertilizerToWaterMap, _ := GetMap(input, "fertilizer-to-water")
-	waterToLightMap, _ := GetMap(input, "water-to-light")
-	lightToTemperatureMap, _ := GetMap(input, "light-to-temperature")
-	temperatureToHumidityMap, _ := GetMap(input, "temperature-to-humidity")
-	humidityToLocationMap, _ := GetMap(input, "humidity-to-location")
+	sectionsAsStrings := strings.Split(input, "\n\n")
+	seeds := getSeeds(sectionsAsStrings[0])
 
-	mappings := make([]int, len(seeds))
+	//Remove the seeds section
+	sectionsAsStrings = sectionsAsStrings[1:]
+
+	//Remove the first line withe the name of the map
+	sections := parseSections(sectionsAsStrings)
+
+	mapped := make([]int, len(seeds))
+
 	for i, seed := range seeds {
-		soil := seedToSoilMap(seed)
-		fertilizer := soilToFertilizerMap(soil)
-		water := fertilizerToWaterMap(fertilizer)
-		light := waterToLightMap(water)
-		temp := lightToTemperatureMap(light)
-		humidity := temperatureToHumidityMap(temp)
-		location := humidityToLocationMap(humidity)
-		mappings[i] = location
+		mapped[i] = seed
+
+		for _, section := range sections {
+
+			for _, mapping := range section {
+				if mapping.Source.Contains(mapped[i]) {
+					mapped[i] = mapping.Apply(mapped[i])
+					break
+				}
+			}
+		}
 	}
-
-	return min(mappings)
+	return minIntSlice(mapped)
 }
-
 
 func SolvePart2(input string) int {
-	seedToSoilMap, _ := GetMap(input, "seed-to-soil")
-	soilToFertilizerMap, _ := GetMap(input, "soil-to-fertilizer")
-	fertilizerToWaterMap, _ := GetMap(input, "fertilizer-to-water")
-	waterToLightMap, _ := GetMap(input, "water-to-light")
-	lightToTemperatureMap, _ := GetMap(input, "light-to-temperature")
-	temperatureToHumidityMap, _ := GetMap(input, "temperature-to-humidity")
-	humidityToLocationMap, _ := GetMap(input, "humidity-to-location")
+	sectionsAsStrings := strings.Split(input, "\n\n")
 
-	mappings := make([]int, 0)
-	cache := make(map[int]int)
-
-	seeds := GetSeeds(input)
-	for seed := range GeneratePart2Seeds(seeds) {
-		if _, ok := cache[seed]; ok {
-			//Already calculated so we don't need to add it to the list
-		} else {
-			soil := seedToSoilMap(seed)
-			fertilizer := soilToFertilizerMap(soil)
-			water := fertilizerToWaterMap(fertilizer)
-			light := waterToLightMap(water)
-			temp := lightToTemperatureMap(light)
-			humidity := temperatureToHumidityMap(temp)
-			location := humidityToLocationMap(humidity)
-			mappings = append(mappings, location)
-			cache[seed] = location
-		}
-	}
-	return min(mappings)
-}
-
-// MapValue maps a value to another value using a list of mapping functions
-func MapValue(x int, mappingFuncs []func(int) int) int {
-	for _, mappingFunc := range mappingFuncs {
-		newX := mappingFunc(x)
-		//Don't want to double map them
-		if newX != x {
-			return newX
-		}
-	}
-	return x
-}
-
-func CompositeMapFunc(mappingFuncs []func(int) int) func(int) int {
-	return func (x int) int {
-		return MapValue(x, mappingFuncs)
-	}
-}
-
-// CreateMapFunc creates a new function that maps a value to another value.
-// if the value falls outside the range of the source, the value is returned
-func CreateMapFunc(destStart int, srcStart int, len int) func(int) int {
-	return func (x int) int {
-		if x < srcStart || x >= srcStart + len {
-			return x
-		}
-		return destStart + (x - srcStart)
-	}
-}
-
-func GetSeeds(input string) []int {
-    re := regexp.MustCompile(`seeds: ([\d\s]+)`)
-    match := re.FindStringSubmatch(input)
-    if len(match) > 1 {
-        stringSeeds := strings.Fields(match[1])
-		intSeeds := make([]int, len(stringSeeds))
-		for i, seed := range stringSeeds {
-			intSeeds[i], _ = strconv.Atoi(seed)
-		}
-		return intSeeds
-    }
-    log.Panic("No seeds found")
-	return nil
-}
-
-func GeneratePart2Seeds(seeds []int) <- chan int {
-	if (len(seeds) % 2 != 0) {
-		log.Panic("Invalid number of seeds")
+	//Seeds are now ranges!
+	seedValues := getSeeds(sectionsAsStrings[0])
+	seeds := make([]Range, len(seedValues) / 2)
+	for i := 0; i < len(seedValues); i += 2 {
+		seeds[i / 2] = NewRange(seedValues[i], seedValues[i] + seedValues[i + 1])
 	}
 
-	starts := make([]int, len(seeds) / 2)
-	lengths := make([]int, len(seeds) / 2)
-	for i := 0; i < len(seeds); i += 2 {
-		starts[i / 2] = seeds[i]
-		lengths[i / 2] = seeds[i + 1]
-	}
-	count := 0
-	ch:= make(chan int)
-    go func() {
-        for x := range starts {
-            for i := 0; i < lengths[x]; i++ {
-				if count % 100000 == 0 {
-					fmt.Printf("Generated %d seeds\n", count)
+	//Remove the seeds section
+	sectionsAsStrings = sectionsAsStrings[1:]
+
+	//Remove the first line withe the name of the map
+	sections := parseSections(sectionsAsStrings)
+
+	for _, section := range sections {
+		new := make([]Range, 0)
+		for len(seeds) > 0 {
+			//Pop the last item off the seeds to process
+			seed := seeds[len(seeds)-1]
+			seeds = seeds[:len(seeds)-1]
+
+			found := false
+			for _, mapping := range section {
+				if mapping.Source.Intersects(seed) {
+					found = true
+					intersection, _ := mapping.Source.Intersection(seed)
+
+					//Map the intersection of the range to the destination
+					mappedStart := mapping.Apply(intersection.Start)
+					mappedEnd := mapping.Apply(intersection.End)
+					new = append(new, NewRange(mappedStart, mappedEnd))
+
+					//Add any other parts of the range that weren't mapped to new seeds
+					if (seed.Start < intersection.Start) {
+						seeds = append(seeds, NewRange(seed.Start, intersection.Start - 1))
+					}
+					if (intersection.End < seed.End) {
+						seeds = append(seeds, NewRange(intersection.End, seed.End))
+					}
+
+					break
 				}
-				count += 1
-                ch <- starts[x] + i
-            }
-        }
-        close(ch)
-    }()
-    return ch
+
+			}
+			//Pass through, we didn't find any mapping
+			if (!found) {
+				new = append(new, seed)
+			}
+		}
+		seeds = new
+	}
+	//fmt.Println("Final seeds", seeds)
+	return minRange(seeds)
 }
 
-func GetMap(input string, mapName string) (func(int) int, error) {
-    scanner := bufio.NewScanner(strings.NewReader(input))
-    reading := false
-    var result []func(int) int
+func parseSections(sectionsAsStrings []string) [][]Mapping {
+	allMappings := make([][]Mapping, len(sectionsAsStrings))
+	for i, section := range sectionsAsStrings {
+		lines := strings.Split(section, "\n")
 
-    for scanner.Scan() {
-        line := scanner.Text()
-        if strings.Contains(line, mapName) {
-            reading = true
-            continue
-        }
-        if reading && strings.TrimSpace(line) == "" {
-            break
-        }
-        if reading {
-            parts := strings.Fields(line)
-            if len(parts) != 3 {
-                return nil, fmt.Errorf("invalid line: %s", line)
-            }
-            row := make([]int, len(parts))
-            for i, part := range parts {
-                num, err := strconv.Atoi(part)
-                if err != nil {
-                    return nil, err
-                }
-                row[i] = num
-            }
-            result = append(result, CreateMapFunc(row[0], row[1], row[2]))
-        }
-    }
+		lines = lines[1:]
 
-    if err := scanner.Err(); err != nil {
-        return nil, err
-    }
-
-    return CompositeMapFunc(result), nil
+		sectionMapping := make([]Mapping, len(lines))
+		for j, line := range lines {
+			if (strings.Trim(line, " ") == "") {
+				continue
+			}
+			tokens := strings.Fields(line)
+			dest, _ := strconv.Atoi(tokens[0])
+			source, _ := strconv.Atoi(tokens[1])
+			length, _ := strconv.Atoi(tokens[2])
+			sectionMapping[j] = Mapping{Source: NewRange(source, source + length), Destination: NewRange(dest, dest + length)}
+		}
+		allMappings[i] = sectionMapping
+	}
+	return allMappings
 }
 
-func min(slice []int) int {
+func getSeeds(inputLine string) []int {
+	tokens := strings.Fields(inputLine)
+
+	//remove the first token `seeds:`
+	tokens = tokens[1:]
+
+	seeds := make([]int, len(tokens))
+	for i, token := range tokens {
+		seeds[i], _ = strconv.Atoi(token)
+	}
+	return seeds
+}
+
+func minIntSlice(slice []int) int {
     min := slice[0]
-    for _, value := range slice {
+    for _, value := range slice[1:] {
         if value < min {
             min = value
         }
     }
     return min
+}
+func minRange(ranges []Range) int {
+	min := ranges[0].Start
+	for i, r := range ranges {
+		if r.Start == 0 {
+			fmt.Println("Found 0 at index", i)
+		}
+		if r.Start < min {
+			min = r.Start
+		}
+	}
+	return min
+}
+
+type Range struct {
+    Start, End int
+}
+func (r Range) Contains(n int) bool {
+    return n >= r.Start && n <= r.End
+}
+func NewRange(start, end int) Range {
+    return Range{Start: start, End: end}
+}
+func (r Range) Intersects(other Range) bool {
+    return r.Start < other.End && r.End > other.Start
+}
+func (r Range) Intersection(other Range) (Range, error) {
+    if !r.Intersects(other) {
+        return Range{}, fmt.Errorf("ranges do not intersect")
+    }
+    return Range{
+        Start: max(r.Start, other.Start),
+        End:   min(r.End, other.End),
+    }, nil
+}
+
+
+
+type Mapping struct {
+    Source      Range
+    Destination Range
+}
+func (m Mapping) String() string {
+    return fmt.Sprintf("Source: %+v, Destination: %+v", m.Source, m.Destination)
+}
+func (m Mapping) Apply(n int) int {
+	if m.Source.Contains(n) {
+		return n - m.Source.Start + m.Destination.Start
+	}
+	return n
+}
+
+
+func minInt(a, b int) int {
+    if a < b {
+        return a
+    }
+    return b
+}
+
+func maxInt(a, b int) int {
+    if a > b {
+        return a
+    }
+    return b
+}
+
+func countDuplicates(ranges []Range) int {
+    counts := make(map[Range]int)
+    for _, r := range ranges {
+        key := Range{r.Start, r.End}
+        counts[key]++
+    }
+
+    duplicates := 0
+    for _, count := range counts {
+        if count > 1 {
+            duplicates += count - 1
+        }
+    }
+    return duplicates
 }
