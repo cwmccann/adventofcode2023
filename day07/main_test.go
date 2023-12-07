@@ -7,21 +7,24 @@ import (
 //destination range start, the source range start, and the range length.
 var input =
 `
-Time:      7  15   30
-Distance:  9  40  200
+32T3K 765
+T55J5 684
+KK677 28
+KTJJT 220
+QQQJA 483
 `
 
 
 func TestDay01Part1(t *testing.T) {
 	solution := SolvePart1(input);
-	if solution != 288 {
+	if solution != 6440 {
 		t.Errorf("Solution incorrect: %d", solution)
 	}
 }
 
 func TestDay01Part2(t *testing.T) {
  	solution := SolvePart2(input);
- 	if solution != 71503 {
+ 	if solution != 5905 {
  		t.Errorf("Solution incorrect: %d", solution)
  	}
 }
