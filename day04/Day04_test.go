@@ -12,14 +12,14 @@ Card 5: 87 83 26 28 32 | 88 30 70 12 93 22 82 36
 Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11
 `
 
-func TestDay01Part1(t *testing.T) {
+func TestPart1(t *testing.T) {
 	solution := SolvePart1(input);
 	if solution != 13 {
 		t.Errorf("Solution incorrect: %d", solution)
 	}
 }
 
-func TestDay01Part2(t *testing.T) {
+func TestPart2(t *testing.T) {
 	solution := SolvePart2(input);
 	if solution != 30 {
 		t.Errorf("Solution incorrect: %d", solution)

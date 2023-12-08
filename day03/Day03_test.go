@@ -82,14 +82,14 @@ func TestHasAdjacentSymbols(t *testing.T) {
 	}
 }
 
-func TestDay01Part1(t *testing.T) {
+func TestPart1(t *testing.T) {
 	solution := SolvePart1(input);
 	if solution != 4361 {
 		t.Errorf("Solution incorrect: %d", solution)
 	}
 }
 
-func TestDay01Part2(t *testing.T) {
+func TestPart2(t *testing.T) {
 	solution := SolvePart2(input);
 	if solution != 467835 {
 		t.Errorf("Solution incorrect: %d", solution)
