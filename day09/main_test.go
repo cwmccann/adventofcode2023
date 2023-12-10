@@ -14,6 +14,24 @@ var input =
 10 13 16 21 30 45
 `
 
+func TestFindNext2(t *testing.T) {
+	nums := []int{0, 3, 6, 9, 12, 15}
+	solution := FindNext2(nums)
+	if solution != 18 {
+		t.Errorf("FindNext incorrect: %d", solution)
+	}
+	nums = []int{1, 3, 6, 10, 15, 21}
+	solution = FindNext2(nums)
+	if solution != 28 {
+		t.Errorf("FindNext incorrect: %d", solution)
+	}
+	nums = []int{10, 13, 16, 21, 30, 45}
+	solution = FindNext(nums)
+	if solution != 68 {
+		t.Errorf("FindNext incorrect: %d", solution)
+	}
+}
+
 func TestFindNext(t *testing.T) {
 	nums := []int{0, 3, 6, 9, 12, 15}
 	solution := FindNext(nums)
