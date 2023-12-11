@@ -174,15 +174,40 @@ func SolvePart2(input string) int {
 			}
 		}
 	}
-	//printGrid(grid)
+	printGrid(grid)
 
 	return count
 }
 
 func printGrid(grid [][]rune) {
-	for _, row := range grid {
-		fmt.Println(string(row))
+	// Horizontal      = "\u2500" // ─
+    // Vertical        = "\u2502" // │
+    // CornerTopLeft   = "\u250C" // ┌
+    // CornerTopRight  = "\u2510" // ┐
+    // CornerBottomLeft = "\u2514" // └
+    // CornerBottomRight = "\u2518" // ┘
+
+	charMap := map[rune]string {
+		'-': "\u2500", // ─
+		'|': "\u2502", // │
+		'F': "\u250C", // ┌
+		'7': "\u2510", // ┐
+		'L': "\u2514", // └
+		'J': "\u2518", // ┘
 	}
+
+	var sb strings.Builder
+	for _, row := range grid {
+		for _, r := range row {
+			if char, ok := charMap[r]; ok {
+				sb.WriteString(char)
+			} else {
+				sb.WriteRune(r)
+			}
+		}
+		sb.WriteRune('\n')
+	}
+	fmt.Println(sb.String())
 }
 
 func replaceCharsWithBlocks(grid [][]rune) [][]rune {
