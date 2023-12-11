@@ -2,10 +2,9 @@ package main
 
 import (
 	"testing"
-)
+	"github.com/stretchr/testify/assert"
 
-const part1Solution = -1
-const part2Solution = -1
+)
 
 var input =
 `
@@ -14,17 +13,13 @@ TEST INPUT
 
 
 func TestPart1(t *testing.T) {
-	solution := SolvePart1(input);
-	if solution != part1Solution {
-		t.Errorf("Part1 Solution incorrect: %d", solution)
-	}
+	assert := assert.New(t)
+	assert.Equal(-1, SolvePart1(input), "input")
 }
 
 func TestPart2(t *testing.T) {
- 	solution := SolvePart2(input);
- 	if solution != part2Solution {
- 		t.Errorf("Part2 Solution incorrect: %d", solution)
- 	}
+	assert := assert.New(t)
+	assert.Equal(-1, SolvePart2(input), "input")
 }
 
 
