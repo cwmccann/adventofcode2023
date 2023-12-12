@@ -26,6 +26,17 @@ func StringToIntSlice(input string) []int {
 	return nums
 }
 
+// StringToIntSlice converts a string of space separated ints to a slice of ints
+func StringToIntSlice2(input string, splitBy string) []int {
+	tokens := strings.Split(input, splitBy)
+	nums := make([]int, len(tokens))
+	for i, token := range tokens {
+		nums[i], _ = strconv.Atoi(token)
+	}
+	return nums
+}
+
+
 // MinInSlice returns the minimum value in a slice of ints
 func MinInSlice(slice []int) int {
     if len(slice) == 0 {
@@ -149,4 +160,8 @@ func All(vs []rune, f func(rune) bool) bool {
 
 type Point struct {
 	X, Y int
+}
+
+func ReplaceAtIndex(str string, replacement rune, index int) string {
+    return str[:index] + string(replacement) + str[index+1:]
 }
