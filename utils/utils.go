@@ -84,3 +84,69 @@ func RemoveAll(s string, charsToRemove string) string {
     }
     return s
 }
+
+func Abs(x int) int {
+    if x < 0 {
+        return -x
+    }
+    return x
+}
+
+func Sum(nums []int) int {
+    sum := 0
+    for _, num := range nums {
+        sum += num
+    }
+    return sum
+}
+
+func Min(nums ...int) int {
+    if len(nums) == 0 {
+        return 0 // or another value that makes sense in your context
+    }
+    min := nums[0]
+    for _, num := range nums {
+        if num < min {
+            min = num
+        }
+    }
+    return min
+}
+
+func Max(nums ...int) int {
+    if len(nums) == 0 {
+        return 0 // or another value that makes sense in your context
+    }
+    max := nums[0]
+    for _, num := range nums {
+        if num > max {
+            max = num
+        }
+    }
+    return max
+}
+
+
+func RangeBetween(a, b int) []int {
+    numbers := make([]int, 0)
+	start := Min(a, b)
+	end := Max(a, b)
+
+    for i := start + 1; i <= end; i++ {
+        numbers = append(numbers, i)
+    }
+    return numbers
+}
+
+func All(vs []rune, f func(rune) bool) bool {
+	for _, v := range vs {
+		if !f(v) {
+			return false
+		}
+	}
+	return true
+}
+
+type Point struct {
+	X, Y int
+}
