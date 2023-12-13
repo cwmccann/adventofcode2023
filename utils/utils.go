@@ -165,3 +165,35 @@ type Point struct {
 func ReplaceAtIndex(str string, replacement rune, index int) string {
     return str[:index] + string(replacement) + str[index+1:]
 }
+
+func TrimAndRemoveEmptyLines(lines []string) []string {
+    nonEmptyLines := make([]string, 0, len(lines))
+    for _, line := range lines {
+        trimmedLine := strings.TrimSpace(line)
+        if trimmedLine != "" {
+            nonEmptyLines = append(nonEmptyLines, trimmedLine)
+        }
+    }
+    return nonEmptyLines
+}
+
+func StringSliceEquals(a, b []string) bool {
+    if len(a) != len(b) {
+        return false
+    }
+    for i, v := range a {
+        if v != b[i] {
+            return false
+        }
+    }
+    return true
+}
+
+func Reverse[T any](s []T) []T {
+    n := len(s)
+    reversed := make([]T, n)
+    for i, v := range s {
+        reversed[n-1-i] = v
+    }
+    return reversed
+}
