@@ -9,7 +9,16 @@ type TestCase = utils.TestCase
 
 var input =
 `
-TEST INPUT
+O....#....
+O.OO#....#
+.....##...
+OO.#O....O
+.O.....O#.
+O.#..O.#.#
+..O..#O..O
+.......O..
+#....###..
+#OO..#....
 `
 
 
@@ -17,8 +26,8 @@ func TestPart1(t *testing.T) {
     tests := []utils.TestCase{
         {
             Name:     "Test 1",
-            Input:    "TEST INPUT",
-            Expected: -1,
+            Input:    input,
+            Expected: 136,
         },
         // Add more test cases here
     }
@@ -35,8 +44,8 @@ func TestPart2(t *testing.T) {
     tests := []utils.TestCase{
         {
             Name:     "Test 1",
-            Input:    "TEST INPUT",
-            Expected: -1,
+            Input:    input,
+            Expected: 64,
         },
         // Add more test cases here
     }
