@@ -55,12 +55,7 @@ func SolvePart2(input string) int {
 		} else {
 			removeFromBox(boxes, hash, lens)
 		}
-		fmt.Printf("After %s:\n", line)
-		printBoxes(boxes)
-		fmt.Printf("\n")
 	}
-	printBoxes(boxes)
-
 
 	total := 0
 	for hash, box := range boxes {
@@ -68,7 +63,6 @@ func SolvePart2(input string) int {
 		for i, lens := range box {
 			boxTotal += (hash + 1) * (i + 1) * lens.focalLength
 		}
-		fmt.Printf("Box %d: %d\n", hash, boxTotal)
 		total += boxTotal
 	}
 
