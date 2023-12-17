@@ -59,7 +59,6 @@ func (b *Beam) String() string {
 func SolvePart1(input string) int {
 	lines := strings.Split(input, "\n")
 	grid := utils.StringsToRune2D(lines)
-
 	return Solve(grid, NewBeam(0, -1, "R"))
 }
 
@@ -71,7 +70,8 @@ func Solve(grid [][]rune, startingBeam Beam) int {
 	beams.PushBack(startingBeam)
 
 	energized := make([]Point, 0)
-	cache := make(map[Point][]string)
+	seen := make(map[Point][]string)
+	
 	for beams.Len() > 0 {
 		beam := beams.PopFront()
 		beam.Move()
@@ -82,13 +82,13 @@ func Solve(grid [][]rune, startingBeam Beam) int {
 		}
 
 		//Drop beams if it's already been here
-		if _, ok := cache[beam.pos]; !ok {
-			cache[beam.pos] = make([]string, 0)
+		if _, ok := seen[beam.pos]; !ok {
+			seen[beam.pos] = make([]string, 0)
 		}
-		if utils.Contains(cache[beam.pos], beam.dir) {
+		if utils.Contains(seen[beam.pos], beam.dir) {
 			continue
 		}
-		cache[beam.pos] = append(cache[beam.pos], beam.dir)
+		seen[beam.pos] = append(seen[beam.pos], beam.dir)
 
 		//Add the beam position to the energized list
 		if (!inList(energized, beam.pos.Y, beam.pos.X)) {
@@ -196,20 +196,13 @@ func SolvePart2(input string) int {
 	C := len(grid[0])
 
 	for r := 0; r < R; r++ {
-		for c := 0; c < C; c++ {
-			if r == 0 {
-				max = utils.Max(max, Solve(grid, NewBeam(-1, c, "D")))
-			}
-			if r == R-1 {
-				max = utils.Max(max, Solve(grid, NewBeam(R, c, "U")))
-			}
-			if c == 0 {
-				max = utils.Max(max, Solve(grid, NewBeam(r, -1, "R")))
-			}
-			if c == C-1 {
-				max = utils.Max(max, Solve(grid, NewBeam(r, C, "L")))
-			}
-		}
+		max = utils.Max(max, Solve(grid, NewBeam(r, -1, "R")))
+		max = utils.Max(max, Solve(grid, NewBeam(r, C, "L")))
+	}
+
+	for c := 0; c < C; c++ {
+		max = utils.Max(max, Solve(grid, NewBeam(-1, c, "D")))
+		max = utils.Max(max, Solve(grid, NewBeam(R, c, "U")))
 	}
 
 	return max;
