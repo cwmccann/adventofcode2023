@@ -6,7 +6,10 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"adventofcode2023/utils"
 )
+
+type Range = utils.Range
 
 func main() {
 	input, err := os.ReadFile("input.txt")
@@ -59,7 +62,7 @@ func SolvePart2(input string) int {
 	seedValues := getSeeds(sectionsAsStrings[0])
 	seeds := make([]Range, len(seedValues) / 2)
 	for i := 0; i < len(seedValues); i += 2 {
-		seeds[i / 2] = NewRange(seedValues[i], seedValues[i] + seedValues[i + 1])
+		seeds[i / 2] = utils.NewRange(seedValues[i], seedValues[i] + seedValues[i + 1])
 	}
 
 	//Remove the seeds section
@@ -79,19 +82,19 @@ func SolvePart2(input string) int {
 			for _, mapping := range section {
 				if mapping.Source.Intersects(seed) {
 					found = true
-					intersection, _ := mapping.Source.Intersection(seed)
+					intersection := mapping.Source.Intersection(seed)
 
 					//Map the intersection of the range to the destination
 					mappedStart := mapping.Apply(intersection.Start)
 					mappedEnd := mapping.Apply(intersection.End)
-					new = append(new, NewRange(mappedStart, mappedEnd))
+					new = append(new, utils.NewRange(mappedStart, mappedEnd))
 
 					//Add any other parts of the range that weren't mapped to new seeds
 					if (seed.Start < intersection.Start) {
-						seeds = append(seeds, NewRange(seed.Start, intersection.Start - 1))
+						seeds = append(seeds, utils.NewRange(seed.Start, intersection.Start - 1))
 					}
 					if (intersection.End < seed.End) {
-						seeds = append(seeds, NewRange(intersection.End, seed.End))
+						seeds = append(seeds, utils.NewRange(intersection.End, seed.End))
 					}
 
 					break
@@ -125,7 +128,7 @@ func parseSections(sectionsAsStrings []string) [][]Mapping {
 			dest, _ := strconv.Atoi(tokens[0])
 			source, _ := strconv.Atoi(tokens[1])
 			length, _ := strconv.Atoi(tokens[2])
-			sectionMapping[j] = Mapping{Source: NewRange(source, source + length), Destination: NewRange(dest, dest + length)}
+			sectionMapping[j] = Mapping{Source: utils.NewRange(source, source + length), Destination: utils.NewRange(dest, dest + length)}
 		}
 		allMappings[i] = sectionMapping
 	}
@@ -167,30 +170,6 @@ func minRange(ranges []Range) int {
 	return min
 }
 
-type Range struct {
-    Start, End int
-}
-func (r Range) Contains(n int) bool {
-    return n >= r.Start && n <= r.End
-}
-func NewRange(start, end int) Range {
-    return Range{Start: start, End: end}
-}
-func (r Range) Intersects(other Range) bool {
-    return r.Start < other.End && r.End > other.Start
-}
-func (r Range) Intersection(other Range) (Range, error) {
-    if !r.Intersects(other) {
-        return Range{}, fmt.Errorf("ranges do not intersect")
-    }
-    return Range{
-        Start: max(r.Start, other.Start),
-        End:   min(r.End, other.End),
-    }, nil
-}
-
-
-
 type Mapping struct {
     Source      Range
     Destination Range
@@ -223,7 +202,7 @@ func maxInt(a, b int) int {
 func countDuplicates(ranges []Range) int {
     counts := make(map[Range]int)
     for _, r := range ranges {
-        key := Range{r.Start, r.End}
+        key := utils.NewRange(r.Start, r.End)
         counts[key]++
     }
 
