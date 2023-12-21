@@ -5,6 +5,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+    "math/big"
 )
 
 // InputToString reads the contents of input.txt and returns it as a string
@@ -205,4 +206,21 @@ func Contains(slice []string, s string) bool {
         }
     }
     return false
+}
+
+
+func GCD(a, b int64) int64 {
+    return new(big.Int).GCD(nil, nil, big.NewInt(a), big.NewInt(b)).Int64()
+}
+
+func LCM(a, b int64) int64 {
+    return a / GCD(a, b) * b
+}
+
+func LCMOfSlice(numbers []int64) int64 {
+    result := numbers[0]
+    for _, number := range numbers[1:] {
+        result = LCM(result, number)
+    }
+    return result
 }

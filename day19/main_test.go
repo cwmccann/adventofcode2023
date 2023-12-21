@@ -37,16 +37,16 @@ func TestWorkflowApplyPartRange(t *testing.T) {
         workflowDef []string
         expected    int
     } {
-        // {
-        //     name:        "Greater than",
-        //     workflowDef: []string{"in{s<1000:A,R}"},
-        //     expected:    999*4000*4000*4000,
-        // },
-        // {
-        //     name:        "Less than",
-        //     workflowDef: []string{"in{s>1000:A,R}"},
-        //     expected:    3000*4000*4000*4000,
-        // },
+        {
+            name:        "less than",
+            workflowDef: []string{"in{s<1000:A,R}"},
+            expected:    999*4000*4000*4000,
+        },
+        {
+            name:        "greater than",
+            workflowDef: []string{"in{s>1000:A,R}"},
+            expected:    3000*4000*4000*4000,
+        },
         {
             name:        "combined",
             workflowDef: []string{"in{s>1000:ppr,R}", "ppr{x<1000:A,R}"},
