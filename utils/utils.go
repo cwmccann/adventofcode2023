@@ -159,8 +159,14 @@ func All(vs []rune, f func(rune) bool) bool {
 	return true
 }
 
-type Point struct {
-	X, Y int
+
+func RuneInString(r rune, s string) bool {
+    for _, c := range s {
+        if c == r {
+            return true
+        }
+    }
+    return false
 }
 
 func ReplaceAtIndex(str string, replacement rune, index int) string {
