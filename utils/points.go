@@ -32,4 +32,12 @@ func (p Point) IsInGrid(rows int, cols int) bool {
 	return p.X >= 0 && p.X < cols && p.Y >= 0 && p.Y < rows
 }
 
+func (p Point) IsInList(points []Point) bool {
+	for _, point := range points {
+		if p.X == point.X && p.Y == point.Y {
+			return true
+		}
+	}
+	return false
+}
 
