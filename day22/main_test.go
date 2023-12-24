@@ -42,7 +42,7 @@ func TestPart2(t *testing.T) {
         {
             Name:     "Test 1",
             Input:    input,
-            Expected: -1,
+            Expected: 7,
         },
         // Add more test cases here
     }

@@ -173,6 +173,15 @@ func ReplaceAtIndex(str string, replacement rune, index int) string {
     return str[:index] + string(replacement) + str[index+1:]
 }
 
+func StringInSlice(a string, list []string) bool {
+    for _, b := range list {
+        if b == a {
+            return true
+        }
+    }
+    return false
+}
+
 func TrimAndRemoveEmptyLines(lines []string) []string {
     nonEmptyLines := make([]string, 0, len(lines))
     for _, line := range lines {
