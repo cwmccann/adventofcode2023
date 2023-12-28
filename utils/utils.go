@@ -32,11 +32,27 @@ func StringToIntSlice2(input string, splitBy string) []int {
 	tokens := strings.Split(input, splitBy)
 	nums := make([]int, len(tokens))
 	for i, token := range tokens {
-		nums[i], _ = strconv.Atoi(token)
+		nums[i], _ = strconv.Atoi(strings.Trim(token, " "))
 	}
 	return nums
 }
 
+func RemoveStringFromSlice(slice []string, s string) []string {
+    for i, v := range slice {
+        if v == s {
+            return append(slice[:i], slice[i+1:]...)
+        }
+    }
+    return slice
+}
+
+
+func AddUniqueToList(list []string, item string) []string {
+	if !StringInSlice(item, list) {
+		list = append(list, item)
+	}
+	return list
+}
 
 // MinInSlice returns the minimum value in a slice of ints
 func MinInSlice(slice []int) int {
