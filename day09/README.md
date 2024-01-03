@@ -1,4 +1,4 @@
-# Advent of Code 2023: Day 9: XXXXMirage Maintenance
+# Advent of Code 2023: Day 9: Mirage Maintenance
 
 Visit the problem statement at [Advent of Code 2023 Day 9](https://adventofcode.com/2023/day/9).
 
