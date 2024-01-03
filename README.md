@@ -85,9 +85,6 @@ got  # to run the tests
 
 I have notes for each days solutions on how I completed them.  Currently all but day 24 is written in Go.
 
-<div style="display: flex; justify-content: space-between; width: 600px; margin: auto;">
-<div style="width: 300px;">
-
 - [Day 01: Trebuchet?!](day01/README.md)
 - [Day 02: Cube Conundrum](day02/README.md)
 - [Day 03: Gear Ratios](day03/README.md)
@@ -101,11 +98,6 @@ I have notes for each days solutions on how I completed them.  Currently all but
 - [Day 11: Cosmic Expansion](day11/README.md)
 - [Day 12: Hot Springs](day12/README.md)
 - [Day 13: Point of Incidence](day13/README.md)
-
-</div>
-<div style="display: flex; justify-content: space-between;">
-<div style="width: 300px;">
-
 - [Day 14: Parabolic Reflector Dish](day14/README.md)
 - [Day 15: Lens Library](day15/README.md)
 - [Day 16: The Floor Will Be Lava](day16/README.md)
@@ -118,6 +110,3 @@ I have notes for each days solutions on how I completed them.  Currently all but
 - [Day 23: A Long Walk](day23/README.md)
 - [Day 24: Never Tell Me The Odds](day24/README.md)
 - [Day 25: Snowverload](day25/README.md)
-
-</div>
-</div>
