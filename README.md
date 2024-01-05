@@ -5,6 +5,8 @@ I'm learning Go and thought to do the advent of code this year with a new langua
 Let's see how far I get!  
 
 **UPDATE**: I finished
+**UPDATE Jan 04 2024**: I got the matrix for day24 part 2 figured out.  What a mess!
+
 
 ## What is advent of Code
 

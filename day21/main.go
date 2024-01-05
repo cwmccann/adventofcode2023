@@ -3,10 +3,11 @@ package main
 import (
 	"adventofcode2023/utils"
 	"fmt"
-	mapset "github.com/deckarep/golang-set/v2"
-	"github.com/gammazero/deque"
 	"strings"
 	"time"
+
+	mapset "github.com/deckarep/golang-set/v2"
+	"github.com/gammazero/deque"
 )
 
 type Point = utils.Point

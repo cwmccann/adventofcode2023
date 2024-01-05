@@ -45,7 +45,7 @@ y_2 - y_1
 
 Things get harder for part 2.  What we need to find is an equation of a particle (rock) that will intersects all the hail particles, in 3D space.
 
-Given a number of hailstones with a position of $(x_n, y_n, z_n) and direction of (dx_n, dy_n, dz_n)$ we need to find a rock with a position of $(x, y, z)$ and a direction of $(dx, dy, dz)$ that will intersect all the hailstones.
+Given a number of hailstones with a position of $(x_n, y_n, z_n)$ and direction of $(dx_n, dy_n, dz_n)$ we need to find a rock with a position of $(x, y, z)$ and a direction of $(dx, dy, dz)$ that will intersect all the hailstones.
 
 In this case we also need to account for $t$.
 
@@ -91,6 +91,10 @@ solutions = sympy.solve(equations)
 8. The only remaining step is to search for an integer solution in the range of the solutions.
 
 I know there are a few ways to solve this without using sympy, and I'm planning to come back to fix this.
+
+## Part 2 (updated)
+
+I got a working matrix solution for part 2 like I did for part 1. It's a beast of matrix but solves it way faster then the sympy version.  To be honest though, I'd stick with the sympy version or even try the z3 approach.  It's much easier to reason about not nearly as picky. 
 
 
 ## Challenges and Learnings
